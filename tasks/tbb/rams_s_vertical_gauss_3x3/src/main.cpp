@@ -2,6 +2,7 @@
 
 #include <oneapi/tbb.h>
 
+#include <algorithm>
 #include <cmath>
 #include <vector>
 

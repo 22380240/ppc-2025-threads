@@ -1,5 +1,6 @@
 #include "seq/rams_s_vertical_gauss_3x3/include/main.hpp"
 
+#include <algorithm>
 #include <cmath>
 #include <vector>
 

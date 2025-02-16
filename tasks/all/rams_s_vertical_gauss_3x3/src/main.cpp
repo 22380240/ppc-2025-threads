@@ -1,5 +1,6 @@
 #include "all/rams_s_vertical_gauss_3x3/include/main.hpp"
 
+#include <algorithm>
 #include <boost/serialization/vector.hpp>
 #include <cmath>
 #include <thread>
