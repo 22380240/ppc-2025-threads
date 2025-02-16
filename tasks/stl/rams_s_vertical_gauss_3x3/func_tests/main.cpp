@@ -37,20 +37,20 @@ static void RunTest(uint32_t width, uint32_t height, std::vector<uint8_t>& in, s
   std::vector<uint8_t> expected(in.size());
 
   {
-    std::shared_ptr<ppc::core::TaskData> task_data = std::make_shared<ppc::core::TaskData>();
-    task_data->inputs.emplace_back(in.data());
-    task_data->inputs_count.emplace_back(width);
-    task_data->inputs_count.emplace_back(height);
-    task_data->inputs.emplace_back(reinterpret_cast<uint8_t*>(kernel.data()));
-    task_data->inputs_count.emplace_back(kernel.size());
-    task_data->outputs.emplace_back(expected.data());
-    task_data->outputs_count.emplace_back(expected.size());
+    std::shared_ptr<ppc::core::TaskData> task_data_seq = std::make_shared<ppc::core::TaskData>();
+    task_data_seq->inputs.emplace_back(in.data());
+    task_data_seq->inputs_count.emplace_back(width);
+    task_data_seq->inputs_count.emplace_back(height);
+    task_data_seq->inputs.emplace_back(reinterpret_cast<uint8_t*>(kernel.data()));
+    task_data_seq->inputs_count.emplace_back(kernel.size());
+    task_data_seq->outputs.emplace_back(expected.data());
+    task_data_seq->outputs_count.emplace_back(expected.size());
 
-    rams_s_vertical_gauss_3x3_seq::TaskSequential test_task(task_data);
-    ASSERT_EQ(test_task.Validation(), true);
-    test_task.PreProcessing();
-    test_task.Run();
-    test_task.PostProcessing();
+    rams_s_vertical_gauss_3x3_seq::TaskSequential test_task_seq(task_data_seq);
+    ASSERT_EQ(test_task_seq.Validation(), true);
+    test_task_seq.PreProcessing();
+    test_task_seq.Run();
+    test_task_seq.PostProcessing();
   }
 
   EXPECT_EQ(out, expected);
