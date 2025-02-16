@@ -27,7 +27,14 @@ def init_cmd_args():
 class PPCRunner:
     def __init__(self):
         self.work_dir = None
-        self.valgrind_cmd = "valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all --suppressions=3rdparty/opencv/platforms/scripts/valgrind.supp --suppressions=3rdparty/opencv/platforms/scripts/valgrind_3rdparty.sup"
+        self.valgrind_cmd = " ".join([
+            "valgrind",
+            "--error-exitcode=1",
+            "--leak-check=full",
+            "--show-leak-kinds=all",
+            "--suppressions=3rdparty/opencv/platforms/scripts/valgrind.supp",
+            "--suppressions=3rdparty/opencv/platforms/scripts/valgrind_3rdparty.sup"
+        ])
 
         if platform.system() == "Windows":
             self.ocv_script_name = "setup_vars_opencv4.cmd"
