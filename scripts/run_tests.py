@@ -28,30 +28,30 @@ class PPCRunner:
     def __init__(self):
         self.work_dir = None
         self.valgrind_cmd = "valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all"
-        ocv_valgrind_suppress_filenames = ["valgrind.supp", "valgrind_3rdparty.supp"]
-        ocv_valgrind_suppress_searchpath = [
-            "build/ppc_opencv/install/share/opencv4",
-            "install/share/opencv4",
-            "3rdparty/opencv/platforms/scripts"
-        ]
-
-        for filename in ocv_valgrind_suppress_filenames:
-            supp_path = next(
-                (
-                    p
-                    for p in map(
-                        lambda x: Path(self.__get_project_path()) / x / filename,
-                        ocv_valgrind_suppress_searchpath,
-                    )
-                    if os.path.isfile(p)
-                ),
-                False
-            )
-            if supp_path:
-                self.valgrind_cmd += f" --suppressions={supp_path}"
-            else:
-                print(f"Couldn't find valgrind suppression file for opencv ({filename})")
-                exit(1)
+        # ocv_valgrind_suppress_filenames = ["valgrind.supp", "valgrind_3rdparty.supp"]
+        # ocv_valgrind_suppress_searchpath = [
+        #     "build/ppc_opencv/install/share/opencv4",
+        #     "install/share/opencv4",
+        #     "3rdparty/opencv/platforms/scripts"
+        # ]
+        #
+        # for filename in ocv_valgrind_suppress_filenames:
+        #     supp_path = next(
+        #         (
+        #             p
+        #             for p in map(
+        #                 lambda x: Path(self.__get_project_path()) / x / filename,
+        #                 ocv_valgrind_suppress_searchpath,
+        #             )
+        #             if os.path.isfile(p)
+        #         ),
+        #         False
+        #     )
+        #     if supp_path:
+        #         self.valgrind_cmd += f" --suppressions={supp_path}"
+        #     else:
+        #         print(f"Couldn't find valgrind suppression file for opencv ({filename})")
+        #         exit(1)
 
         if platform.system() == "Windows":
             self.ocv_script_name = "setup_vars_opencv4.cmd"
