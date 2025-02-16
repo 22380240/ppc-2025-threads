@@ -32,8 +32,8 @@ class PPCRunner:
             "--error-exitcode=1",
             "--leak-check=full",
             "--show-leak-kinds=all",
-            "--suppressions=3rdparty/opencv/platforms/scripts/valgrind.supp",
-            "--suppressions=3rdparty/opencv/platforms/scripts/valgrind_3rdparty.sup"
+            "--suppressions=build/ppc_opencv/install/share/opencv4/valgrind.supp",
+            "--suppressions=build/ppc_opencv/install/share/opencv4/valgrind_3rdparty.sup"
         ])
 
         if platform.system() == "Windows":
