@@ -93,7 +93,7 @@ jobs:
         run: |
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test
           sudo apt-get update
-          sudo apt-get install --no-install-recommends -y gcc-14 g++-14 ninja-build libmpich-dev libomp-dev valgrind
+          sudo apt-get install --no-install-recommends -y gcc-14 g++-14 ninja-build libmpich-dev libomp-dev valgrind tree
           python3 -m pip install -r requirements.txt
       - name: Download installed package
         uses: actions/download-artifact@v4
@@ -104,7 +104,7 @@ jobs:
           mkdir -p install
           tar -xzvf ubuntu-gcc-install.tar.gz -C install
       - name: Run func tests (MPI, num_proc=1)
-        run: python3 scripts/run_tests.py --running-type="processes"
+        run: tree && python3 scripts/run_tests.py --running-type="processes"
         env:
           PROC_COUNT: 1
           OMP_NUM_THREADS: 3
