@@ -50,6 +50,7 @@ static void RunTest(bool pipeline) {
     perf_analyzer->TaskRun(perf_attr, perf_results);
   }
   ppc::core::Perf::PrintPerfStatistic(perf_results);
+
   ASSERT_EQ(in, out);
 }
 
