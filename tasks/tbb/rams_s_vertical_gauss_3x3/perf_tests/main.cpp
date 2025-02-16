@@ -1,3 +1,5 @@
+#include "tbb/rams_s_vertical_gauss_3x3/include/main.hpp"
+
 #include <gtest/gtest.h>
 
 #include <chrono>
@@ -7,14 +9,13 @@
 #include <vector>
 
 #include "core/perf/include/perf.hpp"
-#include "tbb/rams_s_vertical_gauss_3x3/include/main.hpp"
 
 static void RunTest(bool pipeline) {
   constexpr int kCount = 3333;
 
   std::vector<uint8_t> in(kCount * kCount * 3, 0);
   std::vector<uint8_t> out(kCount * kCount * 3, 0);
-  std::vector<float> kernel{-1,-1,-1,-1,3,-1,-1,-1,-1};
+  std::vector<float> kernel{-1, -1, -1, -1, 3, -1, -1, -1, -1};
 
   for (size_t i = 0; i < kCount; i++) {
     in[(i * kCount + i) * 3] = 1;
@@ -52,9 +53,5 @@ static void RunTest(bool pipeline) {
   ASSERT_EQ(in, out);
 }
 
-TEST(rams_s_vertical_gauss_3x3_tbb, test_pipeline_run) {
-  RunTest(true);
-}
-TEST(rams_s_vertical_gauss_3x3_tbb, test_task_run) {
-  RunTest(false);
-}
+TEST(rams_s_vertical_gauss_3x3_tbb, test_pipeline_run) { RunTest(true); }
+TEST(rams_s_vertical_gauss_3x3_tbb, test_task_run) { RunTest(false); }

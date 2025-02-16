@@ -1,3 +1,5 @@
+#include "all/rams_s_vertical_gauss_3x3/include/main.hpp"
+
 #include <gtest/gtest.h>
 
 #include <chrono>
@@ -7,7 +9,6 @@
 #include <vector>
 
 #include "core/perf/include/perf.hpp"
-#include "all/rams_s_vertical_gauss_3x3/include/main.hpp"
 
 static void RunTest(bool pipeline) {
   boost::mpi::communicator world;
@@ -19,7 +20,7 @@ static void RunTest(bool pipeline) {
   if (world.rank() == 0) {
     in = std::vector<uint8_t>(kCount * kCount * 3, 0);
     out = std::vector<uint8_t>(kCount * kCount * 3, 0);
-    kernel = std::vector<float>{-1,-1,-1,-1,3,-1,-1,-1,-1};
+    kernel = std::vector<float>{-1, -1, -1, -1, 3, -1, -1, -1, -1};
     for (size_t i = 0; i < kCount; i++) {
       in[(i * kCount + i) * 3] = 1;
     }
@@ -59,9 +60,5 @@ static void RunTest(bool pipeline) {
   }
 }
 
-TEST(rams_s_vertical_gauss_3x3_all, test_pipeline_run) {
-  RunTest(true);
-}
-TEST(rams_s_vertical_gauss_3x3_all, test_task_run) {
-  RunTest(false);
-}
+TEST(rams_s_vertical_gauss_3x3_all, test_pipeline_run) { RunTest(true); }
+TEST(rams_s_vertical_gauss_3x3_all, test_task_run) { RunTest(false); }

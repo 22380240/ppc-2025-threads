@@ -1,3 +1,5 @@
+#include "all/rams_s_vertical_gauss_3x3/include/main.hpp"
+
 #include <gtest/gtest.h>
 
 #include <boost/mpi/collectives.hpp>
@@ -6,13 +8,14 @@
 #include <opencv2/opencv.hpp>
 #include <vector>
 
-#include "all/rams_s_vertical_gauss_3x3/include/main.hpp"
 #include "core/util/include/util.hpp"
 
-class RamsSVerticalGauss3x3AllTest : public ::testing::TestWithParam<std::tuple<uint32_t, uint32_t, std::vector<uint8_t>, std::vector<float>, std::vector<uint8_t>>> {
-};
+class RamsSVerticalGauss3x3AllTest
+    : public ::testing::TestWithParam<
+          std::tuple<uint32_t, uint32_t, std::vector<uint8_t>, std::vector<float>, std::vector<uint8_t>>> {};
 
-static void RunTest(uint32_t width, uint32_t height, std::vector<uint8_t>&in, std::vector<float>&kernel, std::vector<uint8_t>&expected) {
+static void RunTest(uint32_t width, uint32_t height, std::vector<uint8_t>& in, std::vector<float>& kernel,
+                    std::vector<uint8_t>& expected) {
   boost::mpi::communicator world;
   std::vector<uint8_t> out(expected.size());
 
@@ -35,11 +38,10 @@ static void RunTest(uint32_t width, uint32_t height, std::vector<uint8_t>&in, st
   }
 }
 
-TEST_P(RamsSVerticalGauss3x3AllTest , p) {
+TEST_P(RamsSVerticalGauss3x3AllTest, p) {
   auto [width, height, in, kernel, expected] = GetParam();
   RunTest(width, height, in, kernel, expected);
 }
-
 
 // clang-format off
 INSTANTIATE_TEST_SUITE_P(
@@ -153,11 +155,13 @@ INSTANTIATE_TEST_SUITE_P(
 
 TEST(rams_s_vertical_gauss_3x3_all, test_with_fixture) {
   cv::Mat img = cv::imread(ppc::util::GetAbsolutePath("all/rams_s_vertical_gauss_3x3/data/flower.png"));
-  cv::Mat img_expected = cv::imread(ppc::util::GetAbsolutePath("all/rams_s_vertical_gauss_3x3/data/flower-blurred.png"));
+  cv::Mat img_expected =
+      cv::imread(ppc::util::GetAbsolutePath("all/rams_s_vertical_gauss_3x3/data/flower-blurred.png"));
   cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
   cv::cvtColor(img_expected, img_expected, cv::COLOR_BGR2RGB);
   std::vector<uint8_t> in(img.reshape(1, static_cast<int>(img.total()) * img.channels()));
-  std::vector<uint8_t> expected(img_expected.reshape(1, static_cast<int>(img_expected.total()) * img_expected.channels()));
+  std::vector<uint8_t> expected(
+      img_expected.reshape(1, static_cast<int>(img_expected.total()) * img_expected.channels()));
   // clang-format off
   std::vector<float> kernel{
     1.0/16, 1.0/8, 1.0/16,

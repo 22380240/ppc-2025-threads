@@ -9,7 +9,7 @@ namespace rams_s_vertical_gauss_3x3_tbb {
 
 class TaskTbb : public ppc::core::Task {
  public:
-  explicit TaskTbb (ppc::core::TaskDataPtr task_data) : Task(std::move(task_data)) {}
+  explicit TaskTbb(ppc::core::TaskDataPtr task_data) : Task(std::move(task_data)) {}
   bool PreProcessingImpl() override;
   bool ValidationImpl() override;
   bool RunImpl() override;

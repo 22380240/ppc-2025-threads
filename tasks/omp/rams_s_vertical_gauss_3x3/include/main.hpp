@@ -9,7 +9,7 @@ namespace rams_s_vertical_gauss_3x3_omp {
 
 class TaskOmp : public ppc::core::Task {
  public:
-  explicit TaskOmp (ppc::core::TaskDataPtr task_data) : Task(std::move(task_data)) {}
+  explicit TaskOmp(ppc::core::TaskDataPtr task_data) : Task(std::move(task_data)) {}
   bool PreProcessingImpl() override;
   bool ValidationImpl() override;
   bool RunImpl() override;
