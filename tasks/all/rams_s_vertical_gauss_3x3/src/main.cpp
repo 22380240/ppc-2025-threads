@@ -34,11 +34,16 @@ bool rams_s_vertical_gauss_3x3_all::TaskAll::RunImpl() {
   boost::mpi::broadcast(world_, width_, 0);
   boost::mpi::broadcast(world_, kernel_, 0);
 
-  if (height_ == 0 || width_ == 0) {
+  if (height_ < 3 || width_ < 3) {
     return true;
   }
 
-  size_t world_size = world_.size();
+  size_t world_size = std::min(size_t(world_.size()), size_t(width_) - 2);
+  if (size_t(world_.rank()) >= world_size) {
+    world_.split(1);
+    return true;
+  }
+  auto group = world_.split(0);
   size_t avg_to_send = width_ / world_size;
   size_t extra_to_send = width_ % world_size;
   std::vector<int> sendcounts(world_size);
@@ -56,12 +61,12 @@ bool rams_s_vertical_gauss_3x3_all::TaskAll::RunImpl() {
     }
   }
 
-  int local_width = sendcounts[world_.rank()] / 3;
+  int local_width = sendcounts[group.rank()] / 3;
   std::vector<uint8_t> local_input(local_width * height_ * 3);
   std::vector<uint8_t> local_output(local_width * height_ * 3);
 
   for (size_t y = 0; y < height_; y++) {
-    boost::mpi::scatterv(world_, input_.data() + (y * width_ * 3), sendcounts, displs,
+    boost::mpi::scatterv(group, input_.data() + (y * width_ * 3), sendcounts, displs,
                          local_input.data() + (y * local_width * 3), local_width * 3, 0);
   }
 
@@ -97,9 +102,9 @@ bool rams_s_vertical_gauss_3x3_all::TaskAll::RunImpl() {
 
   /////
 
-  int local_out_width = recvcounts[world_.rank()];
+  int local_out_width = recvcounts[group.rank()];
   for (size_t y = 1; y < height_ - 1; y++) {
-    boost::mpi::gatherv(world_, local_output.data() + (y * local_width + 1) * 3, local_out_width,
+    boost::mpi::gatherv(group, local_output.data() + (y * local_width + 1) * 3, local_out_width,
                         output_.data() + (y * width_ + 1) * 3, recvcounts, 0);
   }
 
