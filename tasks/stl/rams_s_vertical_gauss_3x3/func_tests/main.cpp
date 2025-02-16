@@ -153,8 +153,6 @@ TEST(rams_s_vertical_gauss_3x3_stl, test_with_fixture) {
   cv::Mat img = cv::imread(ppc::util::GetAbsolutePath("stl/rams_s_vertical_gauss_3x3/data/flower.png"));
   cv::Mat img_expected =
       cv::imread(ppc::util::GetAbsolutePath("stl/rams_s_vertical_gauss_3x3/data/flower-blurred.png"));
-  cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
-  cv::cvtColor(img_expected, img_expected, cv::COLOR_BGR2RGB);
   std::vector<uint8_t> in(img.reshape(1, static_cast<int>(img.total()) * img.channels()));
   std::vector<uint8_t> expected(
       img_expected.reshape(1, static_cast<int>(img_expected.total()) * img_expected.channels()));
