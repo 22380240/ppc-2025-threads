@@ -1,4 +1,4 @@
-#include "seq/rams_s_vertical_gauss_3x3/include/main.hpp"
+#include "all/rams_s_vertical_gauss_3x3/include/main_seq.hpp"
 
 #include <algorithm>
 #include <cmath>

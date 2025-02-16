@@ -1,5 +1,4 @@
 #include "omp/rams_s_vertical_gauss_3x3/include/main.hpp"
-#include "omp/rams_s_vertical_gauss_3x3/include/main_seq.hpp"
 
 #include <gtest/gtest.h>
 
@@ -10,10 +9,10 @@
 #include <vector>
 
 #include "core/util/include/util.hpp"
+#include "omp/rams_s_vertical_gauss_3x3/include/main_seq.hpp"
 
 class RamsSVerticalGauss3x3OmpTest
-    : public ::testing::TestWithParam<
-          std::tuple<int, int, std::vector<uint8_t>, std::vector<float>>> {};
+    : public ::testing::TestWithParam<std::tuple<int, int, std::vector<uint8_t>, std::vector<float>>> {};
 
 static void RunTest(int width, int height, std::vector<uint8_t>& in, std::vector<float>& kernel) {
   std::vector<uint8_t> out(in.size());
@@ -64,15 +63,15 @@ static std::vector<uint8_t> GenerateRandomImage(size_t width, size_t height) {
   for (size_t x = 0; x < width; x++) {
     for (size_t y = 0; y < height; y++) {
       for (size_t i = 0; i < 3; i++) {
-        uint8_t k = 0;
-        while ((k = gen()) == 0) {}
-        in[(y * width + x) * 3 + i] = k;
+        size_t k = 0;
+        while ((k = gen()) == 0) {
+        }
+        in[(y * width + x) * 3 + i] = k % 256;
       }
     }
   }
   return in;
 }
-
 
 TEST_P(RamsSVerticalGauss3x3OmpTest, p) {
   auto [width, height, in, kernel] = GetParam();

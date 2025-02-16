@@ -1,5 +1,4 @@
 #include "all/rams_s_vertical_gauss_3x3/include/main.hpp"
-#include "all/rams_s_vertical_gauss_3x3/include/main_seq.hpp"
 
 #include <gtest/gtest.h>
 
@@ -10,11 +9,11 @@
 #include <random>
 #include <vector>
 
+#include "all/rams_s_vertical_gauss_3x3/include/main_seq.hpp"
 #include "core/util/include/util.hpp"
 
 class RamsSVerticalGauss3x3AllTest
-    : public ::testing::TestWithParam<
-          std::tuple<uint32_t, uint32_t, std::vector<uint8_t>, std::vector<float>>> {};
+    : public ::testing::TestWithParam<std::tuple<uint32_t, uint32_t, std::vector<uint8_t>, std::vector<float>>> {};
 
 static void RunTest(uint32_t width, uint32_t height, std::vector<uint8_t>& in, std::vector<float>& kernel) {
   boost::mpi::communicator world;
@@ -66,9 +65,10 @@ static std::vector<uint8_t> GenerateRandomImage(size_t width, size_t height) {
   for (size_t x = 0; x < width; x++) {
     for (size_t y = 0; y < height; y++) {
       for (size_t i = 0; i < 3; i++) {
-        uint8_t k = 0;
-        while ((k = gen()) == 0) {}
-        in[(y * width + x) * 3 + i] = k;
+        size_t k = 0;
+        while ((k = gen()) == 0) {
+        }
+        in[(y * width + x) * 3 + i] = k % 256;
       }
     }
   }
