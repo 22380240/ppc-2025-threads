@@ -2,19 +2,23 @@
 
 #include <gtest/gtest.h>
 
+#include <cstddef>
 #include <cstdint>
 #include <memory>
 #include <opencv2/opencv.hpp>
 #include <random>
+#include <tuple>
 #include <vector>
 
+#include "core/task/include/task.hpp"
 #include "core/util/include/util.hpp"
 #include "tbb/rams_s_vertical_gauss_3x3/include/main_seq.hpp"
 
 class RamsSVerticalGauss3x3TbbTest
     : public ::testing::TestWithParam<std::tuple<int, int, std::vector<uint8_t>, std::vector<float>>> {};
 
-static void RunTest(int width, int height, std::vector<uint8_t>& in, std::vector<float>& kernel) {
+namespace {
+void RunTest(int width, int height, std::vector<uint8_t>& in, std::vector<float>& kernel) {
   std::vector<uint8_t> out(in.size());
 
   std::shared_ptr<ppc::core::TaskData> task_data = std::make_shared<ppc::core::TaskData>();
@@ -56,7 +60,7 @@ static void RunTest(int width, int height, std::vector<uint8_t>& in, std::vector
   EXPECT_EQ(out, expected);
 }
 
-static std::vector<uint8_t> GenerateRandomImage(size_t width, size_t height) {
+std::vector<uint8_t> GenerateRandomImage(size_t width, size_t height) {
   std::vector<uint8_t> in(width * height * 3);
   std::random_device dev;
   std::mt19937 gen(dev());
@@ -66,12 +70,13 @@ static std::vector<uint8_t> GenerateRandomImage(size_t width, size_t height) {
         size_t k = 0;
         while ((k = gen()) == 0) {
         }
-        in[(y * width + x) * 3 + i] = k % 256;
+        in[((y * width + x) * 3) + i] = k % 256;
       }
     }
   }
   return in;
 }
+}  // namespace
 
 TEST_P(RamsSVerticalGauss3x3TbbTest, p) {
   auto [width, height, in, kernel] = GetParam();
@@ -79,7 +84,7 @@ TEST_P(RamsSVerticalGauss3x3TbbTest, p) {
 }
 
 // clang-format off
-INSTANTIATE_TEST_SUITE_P(
+INSTANTIATE_TEST_SUITE_P( // NOLINT(misc-use-anonymous-namespace)
   rams_s_vertical_gauss_3x3_tbb_test,
   RamsSVerticalGauss3x3TbbTest,
   ::testing::Values(

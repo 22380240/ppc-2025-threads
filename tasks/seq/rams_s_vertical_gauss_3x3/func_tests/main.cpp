@@ -5,16 +5,19 @@
 #include <cstdint>
 #include <memory>
 #include <opencv2/opencv.hpp>
+#include <tuple>
 #include <vector>
 
+#include "core/task/include/task.hpp"
 #include "core/util/include/util.hpp"
 
 class RamsSVerticalGauss3x3SeqTest
     : public ::testing::TestWithParam<
           std::tuple<uint32_t, uint32_t, std::vector<uint8_t>, std::vector<float>, std::vector<uint8_t>>> {};
 
-static void RunTest(uint32_t width, uint32_t height, std::vector<uint8_t>& in, std::vector<float>& kernel,
-                    std::vector<uint8_t>& expected) {
+namespace {
+void RunTest(uint32_t width, uint32_t height, std::vector<uint8_t>& in, std::vector<float>& kernel,
+             std::vector<uint8_t>& expected) {
   std::vector<uint8_t> out(expected.size());
 
   std::shared_ptr<ppc::core::TaskData> task_data = std::make_shared<ppc::core::TaskData>();
@@ -33,6 +36,7 @@ static void RunTest(uint32_t width, uint32_t height, std::vector<uint8_t>& in, s
   test_task.PostProcessing();
   EXPECT_EQ(out, expected);
 }
+}  // namespace
 
 TEST_P(RamsSVerticalGauss3x3SeqTest, p) {
   auto [width, height, in, kernel, expected] = GetParam();
@@ -40,7 +44,7 @@ TEST_P(RamsSVerticalGauss3x3SeqTest, p) {
 }
 
 // clang-format off
-INSTANTIATE_TEST_SUITE_P(
+INSTANTIATE_TEST_SUITE_P( // NOLINT(misc-use-anonymous-namespace)
   rams_s_vertical_gauss_3x3_seq_test,
   RamsSVerticalGauss3x3SeqTest,
   ::testing::Values(

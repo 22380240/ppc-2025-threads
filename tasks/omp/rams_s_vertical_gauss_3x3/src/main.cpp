@@ -2,6 +2,8 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstddef>
+#include <cstdint>
 #include <vector>
 
 bool rams_s_vertical_gauss_3x3_omp::TaskOmp::PreProcessingImpl() {
@@ -30,15 +32,15 @@ bool rams_s_vertical_gauss_3x3_omp::TaskOmp::RunImpl() {
   for (int x = 1; x < right; x++) {
     for (size_t y = 1; y < height_ - 1; y++) {
       for (size_t i = 0; i < 3; i++) {
-        output_[(y * width_ + x) * 3 + i] = std::clamp(static_cast<int>(std::round(
+        output_[((y * width_ + x) * 3) + i] = std::clamp(static_cast<int>(std::round(
 #define INNER(Y_SHIFT, X_SHIFT) \
-  input_[((y + (Y_SHIFT)) * width_ + (x + (X_SHIFT))) * 3 + i] * kernel_[4 + 3 * (Y_SHIFT) + (X_SHIFT)]
-#define OUTER(Y) (INNER(Y, -1) + INNER(Y, 0) + INNER(Y, 1))
-                                                           (OUTER(-1) + OUTER(0) + OUTER(1))
+  input_[(((y + (Y_SHIFT)) * width_) + ((x + (X_SHIFT))) * 3) + i] * kernel_[4 + (3 * (Y_SHIFT)) + (X_SHIFT)]
+#define OUTER(Y) ((INNER(Y, -1)) + (INNER(Y, 0)) + (INNER(Y, 1)))
+                                                             ((OUTER(-1)) + (OUTER(0)) + (OUTER(1)))
 #undef OUTER
 #undef INNER
-                                                               )),
-                                                       0, 255);
+                                                                 )),
+                                                         0, 255);
       }
     }
   }
@@ -46,6 +48,6 @@ bool rams_s_vertical_gauss_3x3_omp::TaskOmp::RunImpl() {
 }
 
 bool rams_s_vertical_gauss_3x3_omp::TaskOmp::PostProcessingImpl() {
-  std::copy(output_.begin(), output_.end(), task_data->outputs[0]);
+  std::ranges::copy(output_, task_data->outputs[0]);
   return true;
 }

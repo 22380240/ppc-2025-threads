@@ -8,9 +8,12 @@
 #include <memory>
 #include <vector>
 
+#include "boost/mpi/communicator.hpp"
 #include "core/perf/include/perf.hpp"
+#include "core/task/include/task.hpp"
 
-static void RunTest(bool pipeline) {
+namespace {
+void RunTest(bool pipeline) {
   boost::mpi::communicator world;
   constexpr int kCount = 3333;
 
@@ -59,6 +62,7 @@ static void RunTest(bool pipeline) {
     ASSERT_EQ(in, out);
   }
 }
+}  // namespace
 
 TEST(rams_s_vertical_gauss_3x3_all, test_pipeline_run) { RunTest(true); }
 TEST(rams_s_vertical_gauss_3x3_all, test_task_run) { RunTest(false); }

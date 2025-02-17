@@ -3,19 +3,24 @@
 #include <gtest/gtest.h>
 
 #include <boost/mpi/collectives.hpp>
+#include <cstddef>
 #include <cstdint>
 #include <memory>
 #include <opencv2/opencv.hpp>
 #include <random>
+#include <tuple>
 #include <vector>
 
 #include "all/rams_s_vertical_gauss_3x3/include/main_seq.hpp"
+#include "boost/mpi/communicator.hpp"
+#include "core/task/include/task.hpp"
 #include "core/util/include/util.hpp"
 
 class RamsSVerticalGauss3x3AllTest
     : public ::testing::TestWithParam<std::tuple<uint32_t, uint32_t, std::vector<uint8_t>, std::vector<float>>> {};
 
-static void RunTest(uint32_t width, uint32_t height, std::vector<uint8_t>& in, std::vector<float>& kernel) {
+namespace {
+void RunTest(uint32_t width, uint32_t height, std::vector<uint8_t>& in, std::vector<float>& kernel) {
   boost::mpi::communicator world;
   std::vector<uint8_t> out(in.size());
 
@@ -58,7 +63,7 @@ static void RunTest(uint32_t width, uint32_t height, std::vector<uint8_t>& in, s
   }
 }
 
-static std::vector<uint8_t> GenerateRandomImage(size_t width, size_t height) {
+std::vector<uint8_t> GenerateRandomImage(size_t width, size_t height) {
   std::vector<uint8_t> in(width * height * 3);
   std::random_device dev;
   std::mt19937 gen(dev());
@@ -68,12 +73,13 @@ static std::vector<uint8_t> GenerateRandomImage(size_t width, size_t height) {
         size_t k = 0;
         while ((k = gen()) == 0) {
         }
-        in[(y * width + x) * 3 + i] = k % 256;
+        in[((y * width + x) * 3) + i] = k % 256;
       }
     }
   }
   return in;
 }
+}  // namespace
 
 TEST_P(RamsSVerticalGauss3x3AllTest, p) {
   auto [width, height, in, kernel] = GetParam();
@@ -81,7 +87,7 @@ TEST_P(RamsSVerticalGauss3x3AllTest, p) {
 }
 
 // clang-format off
-INSTANTIATE_TEST_SUITE_P(
+INSTANTIATE_TEST_SUITE_P( // NOLINT(misc-use-anonymous-namespace)
   rams_s_vertical_gauss_3x3_all_test,
   RamsSVerticalGauss3x3AllTest,
   ::testing::Values(
