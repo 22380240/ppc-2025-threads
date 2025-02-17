@@ -43,18 +43,18 @@ bool rams_s_vertical_gauss_3x3_all::TaskAll::RunImpl() {
     return true;
   }
 
-  size_t world_size = std::min(size_t(world_.size()), size_t(width_) - 2);
-  if (size_t(world_.rank()) >= world_size) {
+  std::size_t world_size = std::min(std::size_t(world_.size()), std::size_t(width_) - 2);
+  if (std::size_t(world_.rank()) >= world_size) {
     world_.split(1);
     return true;
   }
   auto group = world_.split(0);
-  size_t avg_to_send = width_ / world_size;
-  size_t extra_to_send = width_ % world_size;
+  std::size_t avg_to_send = width_ / world_size;
+  std::size_t extra_to_send = width_ % world_size;
   std::vector<int> sendcounts(world_size);
   std::vector<int> recvcounts(world_size);
   std::vector<int> displs(world_size, 0);
-  for (size_t i = 0; i < world_size; i++) {
+  for (std::size_t i = 0; i < world_size; i++) {
     int padding = [&] {
       if (i != 0 && i != world_size - 1) {
         return 2;
@@ -72,23 +72,23 @@ bool rams_s_vertical_gauss_3x3_all::TaskAll::RunImpl() {
   std::vector<uint8_t> local_input(local_width * height_ * 3);
   std::vector<uint8_t> local_output(local_width * height_ * 3);
 
-  for (size_t y = 0; y < height_; y++) {
+  for (std::size_t y = 0; y < height_; y++) {
     boost::mpi::scatterv(group, input_.data() + (y * width_ * 3), sendcounts, displs,
                          local_input.data() + (y * local_width * 3), local_width * 3, 0);
   }
 
   /////
 
-  const size_t num_threads = std::min(ppc::util::GetPPCNumThreads(), local_width);
+  const std::size_t num_threads = std::min(ppc::util::GetPPCNumThreads(), local_width);
   std::vector<std::thread> threads(num_threads);
-  for (size_t thread_i = 0; thread_i < num_threads; thread_i++) {
+  for (std::size_t thread_i = 0; thread_i < num_threads; thread_i++) {
     threads[thread_i] = std::thread([&, thread_i] {
-      size_t amount = (local_width / num_threads) + (thread_i < local_width % num_threads ? 1 : 0);
-      size_t left = ((local_width / num_threads) * thread_i) + std::min(local_width % num_threads, thread_i);
-      size_t right = std::min(left + amount, size_t(local_width) - 1);
-      for (size_t x = std::max(left, size_t(1)); x < right; x++) {
-        for (size_t y = 1; y < height_ - 1; y++) {
-          for (size_t i = 0; i < 3; i++) {
+      std::size_t amount = (local_width / num_threads) + (thread_i < local_width % num_threads ? 1 : 0);
+      std::size_t left = ((local_width / num_threads) * thread_i) + std::min(local_width % num_threads, thread_i);
+      std::size_t right = std::min(left + amount, std::size_t(local_width) - 1);
+      for (std::size_t x = std::max(left, std::size_t(1)); x < right; x++) {
+        for (std::size_t y = 1; y < height_ - 1; y++) {
+          for (std::size_t i = 0; i < 3; i++) {
             local_output[((y * local_width + x) * 3) + i] = std::clamp(static_cast<int>(std::round(
 #define INNER(Y_SHIFT, X_SHIFT) \
   local_input[((((y + (Y_SHIFT)) * local_width) + x + (X_SHIFT)) * 3) + i] * kernel_[4 + (3 * (Y_SHIFT)) + (X_SHIFT)]
@@ -103,14 +103,14 @@ bool rams_s_vertical_gauss_3x3_all::TaskAll::RunImpl() {
       }
     });
   }
-  for (size_t thread_i = 0; thread_i < num_threads; thread_i++) {
+  for (std::size_t thread_i = 0; thread_i < num_threads; thread_i++) {
     threads[thread_i].join();
   }
 
   /////
 
   int local_out_width = recvcounts[group.rank()];
-  for (size_t y = 1; y < height_ - 1; y++) {
+  for (std::size_t y = 1; y < height_ - 1; y++) {
     boost::mpi::gatherv(group, local_output.data() + ((y * local_width + 1) * 3), local_out_width,
                         output_.data() + ((y * width_ + 1) * 3), recvcounts, 0);
   }

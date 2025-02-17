@@ -27,9 +27,9 @@ bool rams_s_vertical_gauss_3x3_seq::TaskSequential::RunImpl() {
   if (height_ == 0 || width_ == 0) {
     return true;
   }
-  for (size_t x = 1; x < width_ - 1; x++) {
-    for (size_t y = 1; y < height_ - 1; y++) {
-      for (size_t i = 0; i < 3; i++) {
+  for (std::size_t x = 1; x < width_ - 1; x++) {
+    for (std::size_t y = 1; y < height_ - 1; y++) {
+      for (std::size_t i = 0; i < 3; i++) {
         output_[((y * width_ + x) * 3) + i] = std::clamp(static_cast<int>(std::round(
 #define INNER(Y_SHIFT, X_SHIFT) \
   input_[((((y + (Y_SHIFT)) * width_) + x + (X_SHIFT)) * 3) + i] * kernel_[4 + (3 * (Y_SHIFT)) + (X_SHIFT)]

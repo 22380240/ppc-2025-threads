@@ -30,16 +30,16 @@ bool rams_s_vertical_gauss_3x3_stl::TaskStl::RunImpl() {
   if (height_ == 0 || width_ == 0) {
     return true;
   }
-  const size_t num_threads = std::min(size_t(ppc::util::GetPPCNumThreads()), size_t(width_));
+  const std::size_t num_threads = std::min(std::size_t(ppc::util::GetPPCNumThreads()), std::size_t(width_));
   std::vector<std::thread> threads(num_threads);
-  for (size_t thread_i = 0; thread_i < num_threads; thread_i++) {
+  for (std::size_t thread_i = 0; thread_i < num_threads; thread_i++) {
     threads[thread_i] = std::thread([&, thread_i] {
-      size_t amount = (width_ / num_threads) + (thread_i < width_ % num_threads ? 1 : 0);
-      size_t left = ((width_ / num_threads) * thread_i) + std::min(width_ % num_threads, thread_i);
-      size_t right = std::min(left + amount, size_t(width_) - 1);
-      for (size_t x = std::max(left, size_t(1)); x < right; x++) {
-        for (size_t y = 1; y < height_ - 1; y++) {
-          for (size_t i = 0; i < 3; i++) {
+      std::size_t amount = (width_ / num_threads) + (thread_i < width_ % num_threads ? 1 : 0);
+      std::size_t left = ((width_ / num_threads) * thread_i) + std::min(width_ % num_threads, thread_i);
+      std::size_t right = std::min(left + amount, std::size_t(width_) - 1);
+      for (std::size_t x = std::max(left, std::size_t(1)); x < right; x++) {
+        for (std::size_t y = 1; y < height_ - 1; y++) {
+          for (std::size_t i = 0; i < 3; i++) {
             output_[((y * width_ + x) * 3) + i] = std::clamp(static_cast<int>(std::round(
 #define INNER(Y_SHIFT, X_SHIFT) \
   input_[((((y + (Y_SHIFT)) * width_) + x + (X_SHIFT)) * 3) + i] * kernel_[4 + (3 * (Y_SHIFT)) + (X_SHIFT)]
@@ -54,7 +54,7 @@ bool rams_s_vertical_gauss_3x3_stl::TaskStl::RunImpl() {
       }
     });
   }
-  for (size_t thread_i = 0; thread_i < num_threads; thread_i++) {
+  for (std::size_t thread_i = 0; thread_i < num_threads; thread_i++) {
     threads[thread_i].join();
   }
   return true;

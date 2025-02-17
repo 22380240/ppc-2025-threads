@@ -60,14 +60,14 @@ void RunTest(int width, int height, std::vector<uint8_t>& in, std::vector<float>
   EXPECT_EQ(out, expected);
 }
 
-std::vector<uint8_t> GenerateRandomImage(size_t width, size_t height) {
+std::vector<uint8_t> GenerateRandomImage(std::size_t width, std::size_t height) {
   std::vector<uint8_t> in(width * height * 3);
   std::random_device dev;
   std::mt19937 gen(dev());
-  for (size_t x = 0; x < width; x++) {
-    for (size_t y = 0; y < height; y++) {
-      for (size_t i = 0; i < 3; i++) {
-        size_t k = 0;
+  for (std::size_t x = 0; x < width; x++) {
+    for (std::size_t y = 0; y < height; y++) {
+      for (std::size_t i = 0; i < 3; i++) {
+        std::size_t k = 0;
         while ((k = gen()) == 0) {
         }
         in[((y * width + x) * 3) + i] = k % 256;

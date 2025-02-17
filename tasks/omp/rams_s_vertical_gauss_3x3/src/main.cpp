@@ -30,8 +30,8 @@ bool rams_s_vertical_gauss_3x3_omp::TaskOmp::RunImpl() {
   int right = static_cast<int>(width_) - 1;
 #pragma omp parallel for
   for (int x = 1; x < right; x++) {
-    for (size_t y = 1; y < height_ - 1; y++) {
-      for (size_t i = 0; i < 3; i++) {
+    for (std::size_t y = 1; y < height_ - 1; y++) {
+      for (std::size_t i = 0; i < 3; i++) {
         output_[((y * width_ + x) * 3) + i] = std::clamp(static_cast<int>(std::round(
 #define INNER(Y_SHIFT, X_SHIFT) \
   input_[((((y + (Y_SHIFT)) * width_) + x + (X_SHIFT)) * 3) + i] * kernel_[4 + (3 * (Y_SHIFT)) + (X_SHIFT)]

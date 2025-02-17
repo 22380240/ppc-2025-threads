@@ -19,7 +19,7 @@ void RunTest(bool pipeline) {
   std::vector<uint8_t> out(kCount * kCount * 3, 0);
   std::vector<float> kernel{-1, -1, -1, -1, 3, -1, -1, -1, -1};
 
-  for (size_t i = 0; i < kCount; i++) {
+  for (std::size_t i = 0; i < kCount; i++) {
     in[(i * kCount + i) * 3] = 1;
   }
 
