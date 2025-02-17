@@ -1015,7 +1015,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --no-install-recommends -y \
-            gcc-14 g++-14 ninja-build libmpich-dev libomp-dev valgrind gcovr
+            gcc-14 g++-14 ninja-build openmpi-common libopenmpi-dev openmpi-bin libomp-dev valgrind gcovr
       - name: ccache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
