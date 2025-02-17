@@ -12,7 +12,7 @@
 
 static void RunTest(bool pipeline) {
   boost::mpi::communicator world;
-  constexpr int kCount = 3333;
+  constexpr int kCount = 4321;
 
   std::vector<uint8_t> in;
   std::vector<uint8_t> out;
