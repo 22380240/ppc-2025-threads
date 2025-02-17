@@ -103,7 +103,7 @@ class PPCRunner:
 
     @staticmethod
     def __run_exec(command):
-        println(f"RUNNING_COMMAND {command}")
+        print(f"RUNNING_COMMAND {command}")
         result = subprocess.run(command, shell=True, env=os.environ)
         if result.returncode != 0:
             raise Exception(f"Subprocess return {result.returncode}.")
