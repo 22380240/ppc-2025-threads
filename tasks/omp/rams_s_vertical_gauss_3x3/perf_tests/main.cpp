@@ -55,7 +55,7 @@ void RunTest(bool pipeline) {
 
   ASSERT_EQ(in, out);
 }
-} // namespace
+}  // namespace
 
 TEST(rams_s_vertical_gauss_3x3_omp, test_pipeline_run) { RunTest(true); }
 TEST(rams_s_vertical_gauss_3x3_omp, test_task_run) { RunTest(false); }

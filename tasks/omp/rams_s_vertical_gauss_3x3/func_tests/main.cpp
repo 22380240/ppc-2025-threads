@@ -76,7 +76,7 @@ std::vector<uint8_t> GenerateRandomImage(size_t width, size_t height) {
   }
   return in;
 }
-} // namespace
+}  // namespace
 
 TEST_P(RamsSVerticalGauss3x3OmpTest, p) {
   auto [width, height, in, kernel] = GetParam();
