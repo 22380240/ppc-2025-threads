@@ -103,6 +103,7 @@ class PPCRunner:
 
     @staticmethod
     def __run_exec(command):
+        println(f"RUNNING_COMMAND {command}")
         result = subprocess.run(command, shell=True, env=os.environ)
         if result.returncode != 0:
             raise Exception(f"Subprocess return {result.returncode}.")
@@ -145,7 +146,6 @@ class PPCRunner:
             raise EnvironmentError("Required environment variable 'PROC_COUNT' is not set.")
 
         mpi_running = f"{self.mpi_exec} {additional_mpi_args} -np {proc_count}"
-        print(f"MPI_COMMAND {mpi_running}")
         if not os.environ.get("ASAN_RUN"):
             self.__run_exec(f"{mpi_running} {self.work_dir / 'all_func_tests'} {self.__get_gtest_settings(10)}")
             self.__run_exec(f"{mpi_running} {self.work_dir / 'mpi_func_tests'} {self.__get_gtest_settings(10)}")
