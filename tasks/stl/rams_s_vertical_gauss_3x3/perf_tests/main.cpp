@@ -11,9 +11,8 @@
 #include "core/perf/include/perf.hpp"
 #include "core/task/include/task.hpp"
 
-namespace {
-void RunTest(bool pipeline) {
-  constexpr int kCount = 3333;
+static void RunTest(bool pipeline) {
+  constexpr int kCount = 4321;
 
   std::vector<uint8_t> in(kCount * kCount * 3, 0);
   std::vector<uint8_t> out(kCount * kCount * 3, 0);

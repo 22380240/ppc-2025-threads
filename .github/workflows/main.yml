@@ -700,12 +700,6 @@ jobs:
         uses: mpi4py/setup-mpi@v1
         with:
           mpi: msmpi
-      - name: Download dependencies
-        uses: nick-fields/retry@v3
-        with:
-          timeout_minutes: 60
-          max_attempts: 3
-          command: choco install openssl --execution-timeout 3600
       - name: Setup ccache
         uses: Chocobo1/setup-ccache-action@v1
         with:
@@ -754,12 +748,6 @@ jobs:
         uses: mpi4py/setup-mpi@v1
         with:
           mpi: msmpi
-      - name: Download dependencies
-        uses: nick-fields/retry@v3
-        with:
-          timeout_minutes: 60
-          max_attempts: 3
-          command: choco install openssl --execution-timeout 3600
       - name: Download installed package
         uses: actions/download-artifact@v4
         with:
@@ -820,12 +808,6 @@ jobs:
         uses: mpi4py/setup-mpi@v1
         with:
           mpi: msmpi
-      - name: Download dependencies
-        uses: nick-fields/retry@v3
-        with:
-          timeout_minutes: 60
-          max_attempts: 3
-          command: choco install openssl --execution-timeout 3600
       - name: Download installed package
         uses: actions/download-artifact@v4
         with:
@@ -928,18 +910,12 @@ jobs:
         uses: mpi4py/setup-mpi@v1
         with:
           mpi: msmpi
-      - name: Download dependencies
-        uses: nick-fields/retry@v3
-        with:
-          timeout_minutes: 60
-          max_attempts: 3
-          command: choco install openssl --execution-timeout 3600
       - name: Download installed package
         uses: actions/download-artifact@v4
         with:
           name: windows-clang-install
       - name: Extract installed package
-        run: Expand-Archive -Path .\windows-clang-install.zip -DestinationPath . -Force; tree /f /a
+        run: Expand-Archive -Path .\windows-clang-install.zip -DestinationPath . -Force
         shell: pwsh
       - name: Run tests (threads, num_threads=1)
         run: python3 scripts/run_tests.py --running-type="threads"
@@ -978,12 +954,6 @@ jobs:
         uses: mpi4py/setup-mpi@v1
         with:
           mpi: msmpi
-      - name: Download dependencies
-        uses: nick-fields/retry@v3
-        with:
-          timeout_minutes: 60
-          max_attempts: 3
-          command: choco install openssl --execution-timeout 3600
       - name: Download installed package
         uses: actions/download-artifact@v4
         with:

@@ -13,7 +13,7 @@
 
 namespace {
 void RunTest(bool pipeline) {
-  constexpr int kCount = 3333;
+  constexpr int kCount = 4321;
 
   std::vector<uint8_t> in(kCount * kCount * 3, 0);
   std::vector<uint8_t> out(kCount * kCount * 3, 0);
