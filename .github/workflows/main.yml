@@ -31,9 +31,9 @@ jobs:
   #       run: |
   #         python3 -m flake8 .
   ubuntu-gcc-build:
-    needs:
-      - clang-format
-      - python-lint
+    # needs:
+    #   - clang-format
+    #   - python-lint
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
