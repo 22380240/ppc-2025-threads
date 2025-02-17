@@ -939,10 +939,10 @@ jobs:
         with:
           name: windows-clang-install
       - name: Extract installed package
-        run: Expand-Archive -Path .\windows-clang-install.zip -DestinationPath . -Force
+        run: Expand-Archive -Path .\windows-clang-install.zip -DestinationPath . -Force; tree /f /a
         shell: pwsh
       - name: Run tests (threads, num_threads=1)
-        run: tree /f /a && python3 scripts/run_tests.py --running-type="threads"
+        run: python3 scripts/run_tests.py --running-type="threads"
         env:
           OMP_NUM_THREADS: 1
           CLANG_BUILD: 1
