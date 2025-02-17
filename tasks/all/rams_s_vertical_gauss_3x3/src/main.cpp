@@ -91,9 +91,9 @@ bool rams_s_vertical_gauss_3x3_all::TaskAll::RunImpl() {
           for (size_t i = 0; i < 3; i++) {
             local_output[((y * local_width + x) * 3) + i] = std::clamp(static_cast<int>(std::round(
 #define INNER(Y_SHIFT, X_SHIFT) \
-  local_input[(((y + (Y_SHIFT)) * local_width) + ((x + (X_SHIFT))) * 3) + i] * kernel_[4 + (3 * (Y_SHIFT) + (X_SHIFT))]
-#define OUTER(Y) ((INNER(Y, -1)) + (INNER(Y, 0)) + (INNER(Y, 1)))
-                                                                           ((OUTER(-1)) + (OUTER(0)) + (OUTER(1)))
+  local_input[((((y + (Y_SHIFT)) * local_width) + x + (X_SHIFT)) * 3) + i] * kernel_[4 + (3 * (Y_SHIFT)) + (X_SHIFT)]
+#define OUTER(Y) (INNER(Y, -1) + INNER(Y, 0) + INNER(Y, 1))
+                                                                           (OUTER(-1) + OUTER(0) + OUTER(1))
 #undef OUTER
 #undef INNER
                                                                                )),
