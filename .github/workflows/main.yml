@@ -30,59 +30,59 @@ jobs:
   #     - name: Run linter
   #       run: |
   #         python3 -m flake8 .
-  # ubuntu-gcc-build:
-  #   needs:
-  #     - clang-format
-  #     - python-lint
-  #   runs-on: ubuntu-24.04
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #       with:
-  #         submodules: recursive
-  #     - name: Setup environment
-  #       run: |
-  #         sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-  #         sudo apt-get update
-  #         sudo apt-get install --no-install-recommends -y gcc-14 g++-14 ninja-build libmpich-dev libomp-dev valgrind
-  #         python3 -m pip install -r requirements.txt
-  #     - name: ccache
-  #       uses: hendrikmuhs/ccache-action@v1.2
-  #       with:
-  #         key: ${{ runner.os }}-gcc
-  #         create-symlink: true
-  #         max-size: 1G
-  #     - name: CMake configure
-  #       run: >
-  #         cmake -S . -B build
-  #         -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
-  #         -G Ninja -D USE_SEQ=ON -D USE_MPI=ON -D USE_OMP=ON -D USE_TBB=ON -D USE_STL=ON
-  #         -D USE_FUNC_TESTS=ON -D USE_PERF_TESTS=ON
-  #         -D CMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=install
-  #       env:
-  #         CC: gcc-14
-  #         CXX: g++-14
-  #     - name: Archive revert list
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: revert-list
-  #         path: build/revert-list.txt
-  #     - name: Build project
-  #       run: |
-  #         cmake --build build --parallel
-  #       env:
-  #         CC: gcc-14
-  #         CXX: g++-14
-  #     - name: Install project
-  #       run: |
-  #         cmake --build build --target install
-  #     - name: Archive installed package
-  #       run: |
-  #         tar -czvf ubuntu-gcc-install.tar.gz -C install .
-  #     - name: Upload installed package
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: ubuntu-gcc-install
-  #         path: ubuntu-gcc-install.tar.gz
+  ubuntu-gcc-build:
+    needs:
+      - clang-format
+      - python-lint
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Setup environment
+        run: |
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-14 g++-14 ninja-build libmpich-dev libomp-dev valgrind
+          python3 -m pip install -r requirements.txt
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: ${{ runner.os }}-gcc
+          create-symlink: true
+          max-size: 1G
+      - name: CMake configure
+        run: >
+          cmake -S . -B build
+          -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
+          -G Ninja -D USE_SEQ=ON -D USE_MPI=ON -D USE_OMP=ON -D USE_TBB=ON -D USE_STL=ON
+          -D USE_FUNC_TESTS=ON -D USE_PERF_TESTS=ON
+          -D CMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=install
+        env:
+          CC: gcc-14
+          CXX: g++-14
+      - name: Archive revert list
+        uses: actions/upload-artifact@v4
+        with:
+          name: revert-list
+          path: build/revert-list.txt
+      - name: Build project
+        run: |
+          cmake --build build --parallel
+        env:
+          CC: gcc-14
+          CXX: g++-14
+      - name: Install project
+        run: |
+          cmake --build build --target install
+      - name: Archive installed package
+        run: |
+          tar -czvf ubuntu-gcc-install.tar.gz -C install .
+      - name: Upload installed package
+        uses: actions/upload-artifact@v4
+        with:
+          name: ubuntu-gcc-install
+          path: ubuntu-gcc-install.tar.gz
   # ubuntu-gcc-test:
   #   needs:
   #     - ubuntu-gcc-build
@@ -1084,10 +1084,10 @@ jobs:
           path: 'cov-report'
   ubuntu-gcc-build-perf-stats:
     needs:
-      - ubuntu-gcc-build-codecov
-      - ubuntu-clang-sanitizer-test-extended
-      - windows-clang-test-extended
-      - windows-msvc-test-extended
+      - ubuntu-gcc-build
+      # - ubuntu-clang-sanitizer-test-extended
+      # - windows-clang-test-extended
+      # - windows-msvc-test-extended
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
