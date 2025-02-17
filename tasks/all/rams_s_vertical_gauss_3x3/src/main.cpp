@@ -44,7 +44,7 @@ bool rams_s_vertical_gauss_3x3_all::TaskAll::RunImpl() {
   }
 
   std::size_t world_size = std::min(std::size_t(world_.size()), std::size_t(width_) - 2);
-  printf("\n\n\nWORLD_SIZE=%zu\n\n\n", world_size);
+  printf("\n\n\nWORLD_SIZE=%zu (actual: %d)\n\n\n", world_size, world_.size());
   if (std::size_t(world_.rank()) >= world_size) {
     world_.split(1);
     return true;
