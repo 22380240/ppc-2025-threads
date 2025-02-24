@@ -4,7 +4,9 @@
 
 #include <cstdint>
 #include <memory>
+#if !defined(_WIN64) || !defined(__clang__)
 #include <opencv2/opencv.hpp>
+#endif
 #include <tuple>
 #include <vector>
 
@@ -153,6 +155,7 @@ INSTANTIATE_TEST_SUITE_P( // NOLINT(misc-use-anonymous-namespace)
 );
 // clang-format on
 
+#if !defined(_WIN64) || !defined(__clang__)
 TEST(rams_s_vertical_gauss_3x3_seq, test_with_fixture) {
   cv::Mat img = cv::imread(ppc::util::GetAbsolutePath("seq/rams_s_vertical_gauss_3x3/data/flower.png"));
   cv::Mat img_expected =
@@ -170,3 +173,4 @@ TEST(rams_s_vertical_gauss_3x3_seq, test_with_fixture) {
 
   RunTest(img.cols, img.rows, in, kernel, expected);
 }
+#endif

@@ -6,7 +6,9 @@
 #include <cstddef>
 #include <cstdint>
 #include <memory>
+#if !defined(_WIN64) || !defined(__clang__)
 #include <opencv2/opencv.hpp>
+#endif
 #include <random>
 #include <tuple>
 #include <vector>
@@ -222,6 +224,7 @@ INSTANTIATE_TEST_SUITE_P( // NOLINT(misc-use-anonymous-namespace)
 );
 // clang-format on
 
+#if !defined(_WIN64) || !defined(__clang__)
 TEST(rams_s_vertical_gauss_3x3_all, test_with_fixture) {
   cv::Mat img = cv::imread(ppc::util::GetAbsolutePath("all/rams_s_vertical_gauss_3x3/data/flower.png"));
   std::vector<uint8_t> in(img.reshape(1, static_cast<int>(img.total()) * img.channels()));
@@ -235,3 +238,4 @@ TEST(rams_s_vertical_gauss_3x3_all, test_with_fixture) {
 
   RunTest(img.cols, img.rows, in, kernel);
 }
+#endif
