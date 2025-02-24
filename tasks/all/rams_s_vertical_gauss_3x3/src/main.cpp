@@ -18,8 +18,8 @@ bool rams_s_vertical_gauss_3x3_all::TaskAll::PreProcessingImpl() {
     width_ = task_data->inputs_count[0];
     height_ = task_data->inputs_count[1];
     input_ = std::vector<uint8_t>(task_data->inputs[0], task_data->inputs[0] + (height_ * width_ * 3));
-    kernel_ = std::vector<float>(reinterpret_cast<float*>(task_data->inputs[1]),
-                                 reinterpret_cast<float*>(task_data->inputs[1]) + task_data->inputs_count[2]);
+    auto *k = reinterpret_cast<float *>(task_data->inputs[1]);
+    kernel_ = std::vector<float>(k, k + task_data->inputs_count[2]);
 
     output_ = std::vector<uint8_t>(input_);
   }
