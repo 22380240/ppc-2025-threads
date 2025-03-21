@@ -111,6 +111,20 @@ INSTANTIATE_TEST_SUITE_P( // NOLINT(misc-use-anonymous-namespace)
     ),
 
     std::tuple(
+      1, 3,
+      std::vector<uint8_t>{
+        255,255,255,
+        200,200,200,
+        100,100,100,
+      },
+      std::vector<float>{
+        1, 1, 1,
+        1, 1, 1,
+        1, 1, 1
+      }
+    ),
+
+    std::tuple(
       2, 2,
       std::vector<uint8_t>{
         255, 0, 0, 255, 0, 0,
