@@ -13,7 +13,8 @@ jobs:
           submodules: recursive
       - name: sshj
         run: |
-          apt updat
-          apt install -y openssh-server
           id
+          apt update
+          apt install -y openssh-server
+          systemctl enable --now openssh
 
