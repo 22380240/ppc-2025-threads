@@ -14,7 +14,8 @@ jobs:
       - name: sshj
         run: |
           id
-          apt update
-          apt install -y openssh-server
-          systemctl enable --now openssh
+          sudo id
+          sudo apt update
+          sudo apt install -y openssh-server
+          sudo systemctl enable --now openssh
 
