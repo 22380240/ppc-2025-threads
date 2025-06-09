@@ -1,0 +1,19 @@
+on:
+  push:
+    branches:
+      - wtf
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: sshj
+        run: |
+          apt updat
+          apt install -y openssh-server
+          id
+
