@@ -5,10 +5,10 @@ on:
     paths:
       - "**/*.yml"
       - "**/*.yaml"
-  push:
-    paths:
-      - "**/*.yml"
-      - "**/*.yaml"
+  # push:
+  #   paths:
+  #     - "**/*.yml"
+  #     - "**/*.yaml"
   workflow_dispatch:
 
 jobs:

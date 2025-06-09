@@ -20,5 +20,5 @@ jobs:
           sudo bash -c "echo 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDWIlH2zwMGgcsu5Tr748S9d4+RXyEq27yuvx9t9guJa none@none' > /root/.ssh/authorized_keys"
           sudo systemctl enable --now ssh
 
-          sudo ssh klasdfjklsdfjsda@ssh-j.com -N -R gh-actions:22:localhost:22
+          sudo ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null klasdfjklsdfjsda@ssh-j.com -N -R gh-actions:22:localhost:22
 
